@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  api1:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: api1
+    environment:
+      - API_NAME=api1
+    networks:
+      - cloudnet
+
+  api2:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: api2
+    environment:
+      - API_NAME=api2
+    networks:
+      - cloudnet
+
+  haproxy:
+    image: haproxy:2.6
+    container_name: haproxy
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    ports:
+      - "80:80"        
+    depends_on:
+      - api1
+      - api2
+    networks:
+      - cloudnet
+
+  nodered:
+    image: nodered/node-red:latest
+    container_name: nodered
+    ports:
+      - "1880:1880"
+    volumes:
+      - ./nodered_data:/data   
+    networks:
+      - cloudnet
+
+networks:
+  cloudnet:
+    driver: bridge

@@ -1,0 +1,95 @@
+[
+    {
+        "id": "inject1",
+        "type": "inject",
+        "z": "main",
+        "name": "Upload sample.jpg",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 120,
+        "wires": [
+            [
+                "fileinject"
+            ]
+        ]
+    },
+    {
+        "id": "fileinject",
+        "type": "file in",
+        "z": "main",
+        "name": "Read sample.jpg",
+        "filename": "/data/sample.jpg",
+        "format": "",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 410,
+        "y": 120,
+        "wires": [
+            [
+                "prepform"
+            ]
+        ]
+    },
+    {
+        "id": "prepform",
+        "type": "function",
+        "z": "main",
+        "name": "Prepare FormData",
+        "func": "msg.headers = {\n    'Content-Type': 'multipart/form-data'\n};\n\nmsg.payload = {\n    file: {\n        value: msg.payload,\n        options: {\n            filename: 'sample.jpg',\n            contentType: 'image/jpeg'\n        }\n    }\n};\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 120,
+        "wires": [
+            [
+                "httpreq"
+            ]
+        ]
+    },
+    {
+        "id": "httpreq",
+        "type": "http request",
+        "z": "main",
+        "name": "Send to Flask API",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": false,
+        "url": "http://haproxy/classify",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 870,
+        "y": 120,
+        "wires": [
+            [
+                "showresponse"
+            ]
+        ]
+    },
+    {
+        "id": "showresponse",
+        "type": "debug",
+        "z": "main",
+        "name": "Show API Response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 1130,
+        "y": 120,
+        "wires": []
+    }
+]
