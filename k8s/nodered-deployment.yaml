@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodered
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodered
+  template:
+    metadata:
+      labels:
+        app: nodered
+    spec:
+      containers:
+      - name: nodered
+        image: nodered/node-red:latest
+        ports:
+        - containerPort: 1880
+        volumeMounts:
+        - name: nodered-data
+          mountPath: /data
+        securityContext:
+          runAsUser: 0
+      volumes:
+      - name: nodered-data
+        hostPath:
+          path: /run/desktop/mnt/host/c/Users/Neeraj Modgil/docker-cloud-demo/nodered_data
+          type: DirectoryOrCreate
