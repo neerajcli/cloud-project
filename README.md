@@ -1,4 +1,4 @@
-# 🟢 Private Cloud Image Classification using Kubernetes + HAProxy + Node-RED
+# Private Cloud Image Classification using Kubernetes + HAProxy + Node-RED
 
 This project demonstrates a **private cloud-based AI image classification system** deployed on a **Kubernetes cluster**.  
 A **MobileNetV2 deep learning model** is used for image classification.  
